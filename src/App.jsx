@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react'
 
 import {
   BrowserRouter as Router,
-  Route, Routes
+  Route, Routes, Navigate
 } from 'react-router-dom';
 
 import { Flowbite } from 'flowbite-react';
@@ -17,8 +17,8 @@ import Contacto from './Components/Contacto/Contacto';
 import CompraTickets from './Components/CompraTickets/Tickets';
 function App() {
 
-  const [autotoken, setAutotoken] = useState(false);
-
+  const [authApp, setauth] = useState(false);
+  const [showRoutes, setShowRoutes] = useState(false);
   const [OpenLogin, setOpenLogin] = useState(false);
 
   const [eventList, setEventList] = useState([]);
@@ -84,55 +84,57 @@ function App() {
     fetchData();
   }, []);
 
-  useEffect(() => {
+
+      useEffect(() => {
+
+      
+
     console.log('Lista Act evento:', eventList);
     console.log('Lista Act Seccion:', seccionlist);
     console.log("Lista Act Asiento", asientolist)
     console.log("Lista de Act Clientes", clientelist)
   }, [eventList, seccionlist, asientolist, clientelist]);
+  
+
+
 
   
 
-  // useEffect(() => {
-  //   window.location.reload();
-  //   const storedToken = localStorage.getItem("Token");
-    
-  //   if (storedToken && autotoken === false) {
-  //     setAutotoken(storedToken);
-  //     console.log("Auto Token", storedToken);
-  //   } else if (!storedToken && autotoken !== false) {
-  //     setAutotoken(false);
-  //   }
-  // }, [autotoken]);
 
   useEffect(() => {
-    const storedToken = localStorage.getItem("Token");
-    console.log("Useffect autotoken app")
-    if (storedToken && autotoken === false) {
-      setAutotoken(storedToken);
-      console.log("Auto Token", storedToken);
-    } else if (!storedToken && autotoken !== false) {
-      setAutotoken(false);
+    
+    const auth = localStorage.getItem("succes");
+    console.log("Useffect auth app")
+    console.log("Auth en app", auth);
+   
+    if (auth && authApp === false) {
+      setauth(auth);
+      console.log("Auto Token", auth);
+    } else if (!auth && authApp !== false) {
+      setauth(false);
     }
-  }, [autotoken]);
+  }, [authApp]);
   
   
 
-  if (autotoken) {
+  if (authApp) {
 
+  
     return (
       <Flowbite>
         <div className=''>
           <Router>
             <header>
-              <NavBar autotoken={autotoken}  />
+              <NavBar authApp={authApp}  />
             </header>
             <main>
+            
               <Routes>
                 <Route exact path='/' element={<Home />} />
                 <Route exact path='/eventos' element={<Eventos eventList={eventList} />} />
                 <Route exact path='/contacto' element={<Contacto />} />
                 <Route exact path='/compra' element={<CompraTickets eventList={eventList} seccionlist={seccionlist} asientolist={asientolist} />} />
+              
               </Routes>
             </main>
           </Router>
@@ -146,6 +148,7 @@ function App() {
           <Routes>
             <Route exact path='/' element={<Login clientelist={clientelist} />} />
             <Route exact path='/signin' element={<SignIn />} />
+            
           </Routes>
         </Router>
       </div>

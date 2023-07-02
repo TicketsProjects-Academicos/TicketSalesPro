@@ -20,7 +20,7 @@ const SignIn = () => {
     };
 
     const postData = async () => {
-        const url = 'http://www.ticketsproxapia.somee.com/api/ClientesControllers';
+        const url = 'https://localhost:7124/api/ClientesControllers/signin';
 
         const data =  {
             "idCliente": 0,

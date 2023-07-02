@@ -20,19 +20,7 @@ const Login = ({clientelist}) => {
         e.preventDefault();
         const isFormDataValid = Object.values(formData).every((value) => value.trim() !== "");
         if (isFormDataValid) {
-            clientelist.forEach((cliente) => {
-                if(cliente.correo === formData.email && cliente.password === formData.password) {
-                    localStorage.setItem('Nombre', cliente.nombre);
-                    localStorage.setItem("Apellido", cliente.apellido)
-                    localStorage.setItem("Email", cliente.correo)
-                    let token = true;
-                    localStorage.setItem("Token", token)
-                    console.log(localStorage.getItem("Token"));
-                    window.location.reload();
-                }
-
-                
-            })
+            buscarClientePorId(formData.email, formData.password);
           } else {
             console.log("Por favor, complete todos los campos.");
           }
@@ -40,17 +28,46 @@ const Login = ({clientelist}) => {
         // console.log(formData);
     };
 
-    async function buscarClientePorId(id) {
-        const url = `http://www.ticketsproxapia.somee.com/api/ClientesControllers/${id}`;
+    async function buscarClientePorId(email, password) {
+
+        const data = {
+            email,
+            password
+        }
       
         try {
-          const response = await fetch(url);
-          if (response.ok) {
-            const data = await response.json();
-            return data;
-          } else {
-            throw new Error('Error al buscar el cliente por ID');
-          }
+            const fetchOptions = {
+                method: 'POST',
+                headers: {
+                  'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(data),
+                rejectUnauthorized: false,
+              };
+              
+              fetch('http://www.ticketsproxapia.somee.com/api/ClientesControllers', fetchOptions)
+                .then(response => response.json())
+                .then(data => {
+                    const token = data.result
+                    localStorage.setItem("token", token);
+                    localStorage.setItem("succes", data.succes);
+                    localStorage.setItem("name", data.nombre);
+                    localStorage.setItem("email", data.email);
+                    const auth = localStorage.getItem("succes")
+                    const Token = localStorage.getItem("token")
+                    if (auth) {
+                        console.log(Token);
+                        console.log(auth);
+                        window.location.reload();
+                    }
+                    
+                   
+                })
+                .catch(error => {
+                  console.log(error);
+                });
+              
+          
         } catch (error) {
           console.error(error);
         }
@@ -76,6 +93,8 @@ const Login = ({clientelist}) => {
                           type="email"
                           value={formData.email}
                           onChange={handleChange}
+                          autoComplete="email"
+                          
                         />
                     </div>
                     <div>
@@ -91,11 +110,11 @@ const Login = ({clientelist}) => {
                             type="password"
                             value={formData.password}
                             onChange={handleChange}
+                            autoComplete="current-password"
                         />
                     </div>
                     <div className="flex items-center gap-2">
 
-                        {/* <Checkbox id="remember" /> */}
                         <Label htmlFor="remember">
                             No tiene una cuenta?
                         </Label>
