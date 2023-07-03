@@ -104,15 +104,27 @@ function App() {
   useEffect(() => {
     
     const auth = localStorage.getItem("succes");
+    const expiration = localStorage.getItem("expirationDate");
+    const currentDate = new Date();
     console.log("Useffect auth app")
     console.log("Auth en app", auth);
+    console.log("expiracion", expiration);
+    console.log("Hora actual", currentDate);
    
     if (auth && authApp === false) {
       setauth(auth);
       console.log("Auto Token", auth);
+      if(currentDate > expiration){
+        console.log("Sesion expirada");
+        localStorage.clear();
+        setauth(false);
+      }
     } else if (!auth && authApp !== false) {
       setauth(false);
     }
+
+
+
   }, [authApp]);
   
   

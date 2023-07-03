@@ -1,6 +1,6 @@
 import { Label, TextInput, Checkbox, Button } from "flowbite-react";
 import { useState } from "react";
-const Login = ({clientelist}) => {
+const Login = ({ clientelist }) => {
 
     const [formData, setFormData] = useState({
         email: "",
@@ -21,10 +21,11 @@ const Login = ({clientelist}) => {
         const isFormDataValid = Object.values(formData).every((value) => value.trim() !== "");
         if (isFormDataValid) {
             buscarClientePorId(formData.email, formData.password);
-          } else {
-            console.log("Por favor, complete todos los campos.");
-          }
-      
+
+        } else {
+
+        }
+
         // console.log(formData);
     };
 
@@ -34,20 +35,21 @@ const Login = ({clientelist}) => {
             email,
             password
         }
-      
+
         try {
             const fetchOptions = {
                 method: 'POST',
                 headers: {
-                  'Content-Type': 'application/json',
+                    'Content-Type': 'application/json',
                 },
                 body: JSON.stringify(data),
                 rejectUnauthorized: false,
-              };
-              
-              fetch('http://www.ticketsproxapia.somee.com/api/ClientesControllers', fetchOptions)
+            };
+
+            fetch('http://www.ticketsproxapia.somee.com/api/ClientesControllers', fetchOptions)
                 .then(response => response.json())
                 .then(data => {
+
                     const token = data.result
                     localStorage.setItem("token", token);
                     localStorage.setItem("succes", data.succes);
@@ -55,24 +57,33 @@ const Login = ({clientelist}) => {
                     localStorage.setItem("email", data.email);
                     const auth = localStorage.getItem("succes")
                     const Token = localStorage.getItem("token")
+                 
+
+                    const payloadBase64 = token.split('.')[1];
+                    const payload = JSON.parse(atob(payloadBase64));
+                    const expirationDate = new Date(payload.exp * 1000);
+                 
+
+                    localStorage.setItem("expirationDate", expirationDate);
+
                     if (auth) {
                         console.log(Token);
                         console.log(auth);
                         window.location.reload();
                     }
-                    
-                   
+
+
                 })
                 .catch(error => {
-                  console.log(error);
+                    console.log(error);
                 });
-              
-          
+
+
         } catch (error) {
-          console.error(error);
+            console.error(error);
         }
-      }
-      
+    }
+
 
 
     return (
@@ -87,14 +98,14 @@ const Login = ({clientelist}) => {
                             />
                         </div>
                         <TextInput
-                          id="email"
-                          placeholder="name@flowbite.com"
-                          required
-                          type="email"
-                          value={formData.email}
-                          onChange={handleChange}
-                          autoComplete="email"
-                          
+                            id="email"
+                            placeholder="name@flowbite.com"
+                            required
+                            type="email"
+                            value={formData.email}
+                            onChange={handleChange}
+                            autoComplete="email"
+
                         />
                     </div>
                     <div>
@@ -118,7 +129,7 @@ const Login = ({clientelist}) => {
                         <Label htmlFor="remember">
                             No tiene una cuenta?
                         </Label>
-                        
+
                         <a href="/signin">Sign In</a>
                         {/*  */}
                     </div>
@@ -129,7 +140,7 @@ const Login = ({clientelist}) => {
 
             </div>
         </div>
-        
+
     )
 }
 

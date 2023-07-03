@@ -106,47 +106,42 @@ const CompraTickets = ({ eventList, seccionlist, asientolist }) => {
 
     const [asientoreservado, setAsientoreservado] = useState([]);
 
-    let ClienteCompra = 'Jose Alberto'
 
     const handlecompra = () => {
 
-        console.log("Compra de tickets")
+        console.log("Compra de tickets asiento selecionado antes del useeffect")
         console.log(selectedAsientos)
 
         selectedAsientos.forEach((asientoput) => {
             console.log("ASIENTO en actualizacion")
             asientoput.reservado = true;
-            setAsientoreservado([...asientoreservado, asientoput]);
+
         })
-
         console.log("ASIENTOS ACTUALIZADO")
-        console.log(asientoreservado)
-
-        
-
+        console.log(selectedAsientos)
+        handleconfir()
     }
 
-    useEffect(() => {
-
-        console.log("Asientos Actualizado UseEFFECT")
-        console.log(asientoreservado)
-        asientoreservado.forEach((asientoUpdate) => {
-            console.log("Recorre los asientos")
-            if(asientoUpdate.reservado == true){
-                postData(ClienteCompra, asientoUpdate.numero)
-                updateData(asientoUpdate.id, asientoUpdate)
-
+    const handleconfir = () => {
+        console.log("ASIENTOS LISTO PARA COMPRAR KLKKKKKKK")
+        console.log(selectedAsientos)
+        selectedAsientos.forEach((asientoupdate) => {
+            if(asientoupdate.reservado == true){
+                console.log("Asiento por asiento listo para comprar")
+                console.log(asientoupdate)
+               const nombre =  localStorage.getItem("name")
+                postData(nombre, asientoupdate.numero)
+                updateData(asientoupdate.id,asientoupdate )
             }
         })
-
-    }, [asientoreservado]);
+    }
 
 
     const postData = async (cliente, asiento) => {
         const url = 'http://www.ticketsproxapia.somee.com/api/Reservas';
         const data = {
             id: 0,
-            cliente: localStorage.getItem("Nombre"),
+            cliente: cliente,
             evento: evento.nombreEvento,
             seccion: selectedSeccion,
             asiento: asiento,
@@ -166,7 +161,7 @@ const CompraTickets = ({ eventList, seccionlist, asientolist }) => {
 
             if (response.ok) {
               
-                console.log('Post exitoso');
+                console.log(' exitoso');
                
             } else {
            

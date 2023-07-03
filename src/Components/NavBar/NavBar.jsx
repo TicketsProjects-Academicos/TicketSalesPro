@@ -42,16 +42,17 @@ const NavBar = ({ autotoken }) => {
                         >
                             <Dropdown.Header>
                                 <span className="block text-sm">
-                                    {localStorage.getItem("Nombre")}  {localStorage.getItem("Apellido")} 
-                                   
+                                    {localStorage.getItem("name")}  {localStorage.getItem("Apellido")} 
+                              
+                  
                                 </span>
-                                <span className="block truncate text-sm font-medium">
-                                {localStorage.getItem("Email")}
-                                </span>
+                                {/* <span className="block truncate text-sm font-medium">
+                                {  localStorage.getItem("email")}
+                                </span> */}
                             </Dropdown.Header>
                             <Dropdown.Divider />
                             <Dropdown.Item>
-                                <button onClick={handleLogout}> Sign out</button>
+                                <button onClick={handleLogout}><a href="/">Sign out</a> </button>
                                
                             </Dropdown.Item>
                             <Dropdown.Item>
