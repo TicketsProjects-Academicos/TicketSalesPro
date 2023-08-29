@@ -1,6 +1,12 @@
 import { Label, TextInput, Checkbox, Button } from "flowbite-react";
 import { useState } from "react";
+import { fetchAuthUser } from "../../Redux/users/functionsUser";
+import { useDispatch, useSelector } from "react-redux";
 const Login = ({ clientelist }) => {
+
+    const dispatch = useDispatch()
+
+    const nombre = useSelector(state => state.Users.nameUser)
 
     const [formData, setFormData] = useState({
         email: "",
@@ -18,9 +24,14 @@ const Login = ({ clientelist }) => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
+
         const isFormDataValid = Object.values(formData).every((value) => value.trim() !== "");
         if (isFormDataValid) {
-            buscarClientePorId(formData.email, formData.password);
+            dispatch(fetchAuthUser(formData.email, formData.password))
+            console.log("-------------")
+            console.log(nombre)
+            
+
 
         } else {
 
@@ -51,6 +62,7 @@ const Login = ({ clientelist }) => {
                 .then(data => {
 
                     const token = data.result
+                    
                     localStorage.setItem("token", token);
                     localStorage.setItem("succes", data.succes);
                     localStorage.setItem("name", data.nombre);
@@ -75,7 +87,7 @@ const Login = ({ clientelist }) => {
 
                 })
                 .catch(error => {
-                    console.log(error);
+                    console.log("Error: " + error);
                 });
 
 
