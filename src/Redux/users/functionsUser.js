@@ -15,7 +15,7 @@ export function fetchAuthUser(email, password) {
     //http://www.ticketsproxapia.somee.com/api/ClientesControllers
     //https://localhost:7124/api/ClientesControllers
 
-      const resplogin = await fetch('http://www.ticketsproxapia.somee.com/api/ClientesControllers', {
+      const resplogin = await fetch('https://www.ticketsproxapia.somee.com/api/ClientesControllers', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
